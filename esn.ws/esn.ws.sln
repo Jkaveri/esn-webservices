@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "esn.ws", "esn.ws\esn.ws.csproj", "{E1EEA30B-6FCC-4F67-AA69-2AA1992B3B21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JK.Core", "Core\JK.Core.csproj", "{FAA91BFE-2958-4D07-9117-BDB94DA91F48}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1EEA30B-6FCC-4F67-AA69-2AA1992B3B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EEA30B-6FCC-4F67-AA69-2AA1992B3B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EEA30B-6FCC-4F67-AA69-2AA1992B3B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EEA30B-6FCC-4F67-AA69-2AA1992B3B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAA91BFE-2958-4D07-9117-BDB94DA91F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAA91BFE-2958-4D07-9117-BDB94DA91F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAA91BFE-2958-4D07-9117-BDB94DA91F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAA91BFE-2958-4D07-9117-BDB94DA91F48}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FAA91BFE-2958-4D07-9117-BDB94DA91F48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Core</RootNamespace>
+    <AssemblyName>Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NVelocity">
+      <HintPath>bin\Release\NVelocity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\Accounts.cs" />
+    <Compile Include="Accounts\Profiles.cs" />
+    <Compile Include="Accounts\AccountsManager.cs" />
+    <Compile Include="Accounts\AccountEnums.cs" />
+    <Compile Include="Accounts\Relation.cs" />
+    <Compile Include="Accounts\RelationType.cs" />
+    <Compile Include="SiteSettings.cs" />
+    <Compile Include="Core\DB.cs" />
+    <Compile Include="Core\DBQuery.cs" />
+    <Compile Include="Core\JKBean.cs" />
+    <Compile Include="Core\JKManager.cs" />
+    <Compile Include="Core\Paginate.cs" />
+    <Compile Include="Core\SiteSettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\Cookier.cs" />
+    <Compile Include="Utilities\CryptoRsa.cs" />
+    <Compile Include="Utilities\DateCSharpToJS.cs" />
+    <Compile Include="Utilities\HtmlRemoval.cs" />
+    <Compile Include="Utilities\Mailer.cs" />
+    <Compile Include="Utilities\MailSMTP.cs" />
+    <Compile Include="Utilities\MailTemplates.cs" />
+    <Compile Include="Utilities\MessageBox.cs" />
+    <Compile Include="Utilities\RechaptchaValidate.cs" />
+    <Compile Include="Utilities\RemotePost.cs" />
+    <Compile Include="Utilities\TemplateEngine.cs" />
+    <Compile Include="Utilities\Utils.cs" />
+    <Compile Include="Utilities\ZCache.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Apps\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
