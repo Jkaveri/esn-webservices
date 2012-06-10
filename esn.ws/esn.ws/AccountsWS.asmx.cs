@@ -12,7 +12,7 @@ namespace esn.ws
     /// <summary>
     /// Summary description for Accounts
     /// </summary>
-    [WebService(Namespace = "http://tempuri.org/")]
+    [WebService(Namespace = "http://esn.com.vn/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
@@ -28,7 +28,7 @@ namespace esn.ws
         /// <param name="password">passsword not encrypt</param>
         /// <returns>true for success</returns>
         [WebMethod]
-        public bool login(string email, string password)
+        public bool Login(string email, string password)
         {
             return Accounts.Login(email, password);
         }
@@ -89,5 +89,15 @@ namespace esn.ws
         {
             return manager.ChangePassword(email, oldPassword, newPassword);
         } 
+        [WebMethod]
+        public bool AddFriend(int accID, int friendID)
+        {
+            return manager.AddFriend(accID, friendID);
+        }
+        [WebMethod]
+        public bool ConfirmAddFriendRequest(int relationID)
+        {
+            return manager.ConfirmRelationRequest(relationID);
+        }
     }
 }
