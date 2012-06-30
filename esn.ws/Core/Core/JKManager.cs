@@ -57,7 +57,7 @@ namespace JK.Core
         /// <param name="orderBy">Order by whic column</param>
         /// <param name="order">DESC|ASC</param>
         /// <returns>IEnumerable list entities</returns>
-        public IEnumerable<T> GetListEntities(int page = 1, int pageSize = 10, string whereClause = "", string orderBy = "", string order = "ASC")
+        public virtual List<T> GetListEntities(int page = 1, int pageSize = 10, string whereClause = "", string orderBy = "", string order = "ASC")
         {
             var objs = new List<T>();
             //instance object to get primary key name

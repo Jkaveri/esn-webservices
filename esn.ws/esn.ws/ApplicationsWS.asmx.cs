@@ -19,11 +19,10 @@ namespace esn.ws
     {
         private NotificationsManager manager = new NotificationsManager();
         [WebMethod]
-        public List<Notifications> LoadNotifications(int accountID)
+        public List<Notifications> GetUnReadNotifications(int accountID)
         {
             try
             {
-
                 return manager.GetUnReadNotifications(accountID);
             }
             catch (Exception)
@@ -32,5 +31,20 @@ namespace esn.ws
                 return null;
             }
         }
+       [WebMethod]
+        public List<Notifications> GetListNotifications(int accountID,int pageNum, int pageSize)
+       {
+           return manager.GetListNotifications(accountID,pageNum,pageSize);
+       }
+        [WebMethod]
+        public void SetNotifyReaded(int notifyID)
+        {
+            var notify = new Notifications();
+            if(notify.Retrieve(notifyID))
+            {
+                notify.Status = NotificationStatus.Read;
+                notify.Save(true);
+            }
+        } 
     }
 }

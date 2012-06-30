@@ -23,7 +23,7 @@ namespace JK.Core.Utilities
         public static bool EmailIsValid(this string email)
         {
             if (String.IsNullOrEmpty(email)) return false;
-            var reg = new Regex(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*");
+            var reg = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+){1,3}$");
             return reg.IsMatch(email);
         }
 
@@ -104,9 +104,13 @@ namespace JK.Core.Utilities
         /// </summary>
         /// <param name="input">string; string input</param>
         /// <returns>If null or empty, return true</returns>
-        public static bool IsNullOrEmpty(this string input)
+        public static bool IsNotNullOrEmpty(this string input)
         {
             return (input != null && input.Length > 0);
+        }
+        public static bool IsNullOrEmpty(this string input)
+        {
+            return !input.IsNotNullOrEmpty();
         }
 
         /// <summary>
@@ -223,6 +227,23 @@ namespace JK.Core.Utilities
                 sr.Close();
                 return text;
             }
+        }
+        private static double ToRad(this double a)
+        {
+            return a*Math.PI/180;
+        }
+        public static double CalcDistance2Point(double lat1,double lon1, double lat2, double lon2)
+        {
+            const int r = 6371;//km -- ban kinh trai dat
+            var dLat = Math.Abs(lat2 - lat1).ToRad();
+            var dLon = Math.Abs(lon2 - lon1).ToRad();
+            lat1 = lat1.ToRad();
+            lat2 = lat2.ToRad();
+            
+            var a = Math.Sin(dLat/2)*Math.Sin(dLat/2)+
+                    Math.Cos(lat1) * Math.Cos(lat2)*Math.Sin(dLon / 2) * Math.Sin(dLon / 2) ;
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return r * c;
         }
     }
 }

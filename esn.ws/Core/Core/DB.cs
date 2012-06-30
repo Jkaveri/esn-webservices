@@ -267,7 +267,7 @@ namespace JK.Core
             {
                 if (query == null) throw new Exception("query param is null");
                 if (string.IsNullOrEmpty(query.TableName)) throw new Exception("Table name is null or empty");
-                
+
                 query.OrderBy = (string.IsNullOrEmpty(query.OrderBy)) ? "" : query.OrderBy;
                 CloseReader(); // close current reader before execute other query
                 string cmdText;
@@ -534,16 +534,16 @@ namespace JK.Core
             //query 
             var query = "";
             //type of this object            
-            var type = obj.GetType(); 
+            var type = obj.GetType();
             //get primary key name
             var propPK = type.GetProperty("PrimaryKeyName");
             var pkName = propPK.GetValue(obj, null);
             //Name of this object = name of table in db
             string tableName = type.Name;
             //query string
-            query = "SELECT * FROM " + tableName + " WHERE "+pkName+" = @id"; 
+            query = "SELECT * FROM " + tableName + " WHERE " + pkName + " = @id";
             Query(query, id); //execute query with parameter ID
-            if(HasResult)
+            if (HasResult)
             {
                 //read data
                 Read();
@@ -557,11 +557,17 @@ namespace JK.Core
                     foreach (DataRow row in rows)
                     {
                         //lay ten cot
-                        var columnName = row["ColumnName"].ToString(); 
+                        var columnName = row["ColumnName"].ToString();
                         //lay property
-                        var property = type.GetProperty((pkName.Equals(columnName)) ? "ID" : columnName); //get property by name
+                        var property = type.GetProperty(columnName); //get property by name
                         //neu property ko ton tai thi bo qua
                         if (property == null) continue;
+                        //neu la enum
+                        if (property.PropertyType.IsEnum)
+                        {
+                            property.SetValue(obj, GetInt32(columnName), null);
+                            continue;
+                        }
                         //duyet cac kieu du lieu cua property nay
                         switch (property.PropertyType.Name)
                         {
@@ -583,11 +589,12 @@ namespace JK.Core
                             case "DateTime":
                                 property.SetValue(obj, GetDateTime(columnName), null);
                                 break;
-                            case "Float":
-                                property.SetValue(obj, GetFloat(columnName), null);
+                            case "Double":
+                                property.SetValue(obj, GetDouble(columnName), null);
                                 break;
                         }
                     }
+                    return true;
                 }
             }
             return false;
@@ -661,6 +668,9 @@ namespace JK.Core
             if (_connection == null) throw new Exception("Not Connection");
             //get object type for reflection
             Type type = obj.GetType();
+            //get primary key name
+            var propPK = type.GetProperty("PrimaryKeyName");
+            var pkName = propPK.GetValue(obj, null).ToString();
             // table name            
             string tableName = type.Name;
             //
@@ -728,7 +738,7 @@ namespace JK.Core
                 //get new id
                 int newID = GetInt32(0);
                 //get id property by name
-                PropertyInfo propID = type.GetProperty("ID");
+                var propID = type.GetProperty(pkName);
                 if (propID != null)
                 {
                     //set value for property
@@ -867,7 +877,7 @@ namespace JK.Core
                 //column's data type
                 //  string dataType = row["DataType"].ToString();
                 //get property by name
-                var property = type.GetProperty((primaryKeyName.Equals(columnName)) ? "ID" : columnName);
+                var property = type.GetProperty(columnName);
                 if (property != null)
                 {
                     object value;
@@ -946,15 +956,19 @@ namespace JK.Core
             return Reader;
         }
 
-        public bool DeleteReplationShip(object obj, bool forever = false)
+        public bool DeleteReplationship(object obj, bool forever = false)
         {
             try
             {
-                Type type = obj.GetType();
-                string tableName = type.Name;
-                PropertyInfo idProp = type.GetProperty("ID");
-                object id = idProp.GetValue(obj, null);
-                using (SqlDataReader rd = FindReplationShip(tableName))
+                var type = obj.GetType();
+                //get prymary key name
+                var propPriamryKey = type.GetProperty("PrimaryKeyName");
+                var priamryKeyName = propPriamryKey.GetValue(obj, null).ToString();
+                var tableName = type.Name;
+
+                var idProp = type.GetProperty(priamryKeyName);
+                var id = idProp.GetValue(obj, null);
+                using (var rd = FindReplationShip(tableName))
                 {
                     while (rd.Read())
                     {
@@ -979,7 +993,7 @@ namespace JK.Core
             }
             catch (Exception ex)
             {
-                throw;
+                return false;
             }
         }
 
@@ -991,31 +1005,31 @@ namespace JK.Core
         /// <returns>true if success</returns>
         public bool Delete(object obj, bool forever = false)
         {
-            //neu obj = null thi nem' loi~ :)
-            if (obj == null) throw new Exception("Null object");
+            //neu obj = null thi tra ve sai
+            if (obj == null) return false;
             //get type for reflection
             var type = obj.GetType();
             //get prymary key name
             var propPriamryKey = type.GetProperty("PrimaryKeyName");
-            var priamryKeyName = propPriamryKey.GetValue(obj, null);
+            var priamryKeyName = propPriamryKey.GetValue(obj, null).ToString();
             //get tablename = ten class
             var tableName = type.Name;
             //lay id property
-            var idProp = type.GetProperty("ID");
+            var idProp = type.GetProperty(priamryKeyName);
             //neu id property null thi quan loi~ :))
             if (idProp == null) throw new Exception("ID property not exist, add this or override Delete method");
             //neu property nay co the doc
-            DeleteReplationShip(obj, forever); // delete replationship
+            DeleteReplationship(obj, forever); // delete replationship
             //set prop id
             var id = idProp.GetValue(obj, null);
             //query
             var query = new StringBuilder();
             //generate query string
             query.AppendFormat(
-                !forever ?
-                //neu khong delete vinh vien thi update lai
-                "UPDATE {0} SET Deleted = 1 WHERE {1} = @ID" :
-                //neu delete vinh vien thi thuc thi cau delete luon
+                !forever
+                    ? //neu khong delete vinh vien thi update lai
+                "UPDATE {0} SET Deleted = 1 WHERE {1} = @ID"
+                    : //neu delete vinh vien thi thuc thi cau delete luon
                 "DELETE {0} WHERE {1} = @ID", tableName, priamryKeyName);
 
             return ExecuteUpdate(query.ToString(), id);
@@ -1227,7 +1241,7 @@ namespace JK.Core
         /// </summary>
         /// <param name="index">string; Name of index</param>
         /// <returns>float value</returns>
-        public float GetFloat(int index)
+        public double GetDouble(int index)
         {
             string input = GetString(index);
             float output = 0;
@@ -1242,15 +1256,15 @@ namespace JK.Core
         }
 
         /// <summary>
-        /// Get Float 
+        /// Get Float  
         /// </summary>
         /// <param name="name">string; Name of column</param>
         /// <returns>float column</returns>
-        public float GetFloat(string name)
+        public double GetDouble(string name)
         {
             string input = GetString(name);
-            float output = 0;
-            if (float.TryParse(input, out output))
+            double output = 0;
+            if (double.TryParse(input, out output))
             {
                 return output;
             }
@@ -1353,11 +1367,11 @@ namespace JK.Core
                     foreach (DataRow row in rows)
                     {
                         var columnName = row["ColumnName"].ToString(); //get column name
-                        var property = type.GetProperty((keyName.Equals(columnName))?"ID":columnName); //get property by name
+                        var property = type.GetProperty(columnName); //get property by name
                         if (property == null) continue;
-                        if(property.PropertyType.IsEnum)
+                        if (property.PropertyType.IsEnum)
                         {
-                            property.SetValue(obj,GetInt32(columnName),null);
+                            property.SetValue(obj, GetInt32(columnName), null);
                             continue;
                         }
                         switch (property.PropertyType.Name)
@@ -1380,8 +1394,8 @@ namespace JK.Core
                             case "DateTime":
                                 property.SetValue(obj, GetDateTime(columnName), null);
                                 break;
-                            case "Float":
-                                property.SetValue(obj, GetFloat(columnName), null);
+                            case "Double":
+                                property.SetValue(obj, GetDouble(columnName), null);
                                 break;
                         }
                     }

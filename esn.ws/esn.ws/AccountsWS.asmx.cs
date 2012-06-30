@@ -16,7 +16,7 @@ namespace esn.ws
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
-        // [System.Web.Script.Services.ScriptService]
+    [System.Web.Script.Services.ScriptService]
     public class AccountWS : WebService
     {
         private AccountManager manager = new AccountManager();
@@ -32,6 +32,7 @@ namespace esn.ws
         {
             return Accounts.Login(email, password);
         }
+
         /// <summary>
         /// Retrieve account info by id
         /// </summary>
@@ -42,62 +43,141 @@ namespace esn.ws
         {
             var account = new Accounts();
             account.Retrieve(id);
-            return account;
+            return new Accounts
+                       {
+                           AccID = account.AccID,
+                           RoleID = account.RoleID,
+                           Email = account.Email,
+                           AccessToken = account.AccessToken,
+                           DateCreated = account.DateCreated,
+                           IsOnline = account.IsOnline,
+                           Profile = account.Profile
+                       };
         }
+
+        [WebMethod]
+        public object RetrieveJSON(int id)
+        {
+            var account = new Accounts();
+            account.Retrieve(id);
+            var profile = account.Profile;
+            return new
+                       {
+                           AccID = account.AccID,
+                           RoleID = account.RoleID,
+                           Email = account.Email,
+                           AccessToken = account.AccessToken,
+                           DateCreated = account.DateCreated,
+                           IsOnline = account.IsOnline,
+                           Username = profile.Username,
+                           Name = profile.Name,
+                           Address = profile.Address,
+                           Street = profile.Street,
+                           District = profile.District,
+                           City = profile.City,
+                           Country = profile.Country,
+                           Avatar = profile.Avatar,
+                           Phone = profile.Phone,
+                           Birthday = profile.Birthday,
+                           Gender = profile.Gender,
+                           ShareType = profile.ShareType,
+                           Favorite = profile.Favorite,
+                           Status = account.Status
+                       };
+        }
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="firstName"></param>
-        /// <param name="lastName"></param>
+        /// <param name="name"> </param>
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <param name="birthday"></param>
         /// <param name="phone"></param>
         /// <param name="gender"></param>
+        /// <param name="accessToken"> </param>
         /// <returns></returns>
         [WebMethod]
-        public Accounts Register(string firstName, string lastName, string email, string password, DateTime birthday,
-                                 string phone, bool gender)
+        public int Register(string name, string email, string password, DateTime birthday,
+                            string phone, bool gender, string accessToken)
         {
-            return manager.Register(firstName,lastName,email,password,birthday,phone,gender);
-        }
-        [WebMethod]
-        public Profiles GetProfiles(int accountID)
-        {
-            var account = new Accounts();
-            account.AccID = accountID;
-            return account.GetProfile();
+            return manager.Register(name, email, password, birthday, phone, gender, accessToken);
         }
 
-        [WebMethod]
-        public List<Accounts> GetListEntities(int page, int pagesize)
-        {
-            return manager.GetListEntities(page, pagesize).ToList();
-        }
-        [WebMethod]
-        public List<Accounts> GetListFriends(int accountID, int pageNum, int pageSize)
-        {
-            return manager.GetListFriends(accountID, pageNum, pageSize);
-        } 
-        [WebMethod]
-        public List<Profiles> GetListFriendProfiles (int accountID, int pageNum, int pageSize)
-        {
-            return manager.GetListFriendProfiles(accountID, pageNum, pageSize);
-        }
-        [WebMethod]
-        public bool ChangePassword(string email, string oldPassword, string newPassword)
-        {
-            return manager.ChangePassword(email, oldPassword, newPassword);
-        } 
         [WebMethod]
         public bool AddFriend(int accID, int friendID)
         {
             return manager.AddFriend(accID, friendID);
         }
+
         [WebMethod]
         public bool ConfirmAddFriendRequest(int relationID)
         {
             return manager.ConfirmRelationRequest(relationID);
         }
+
+        [WebMethod]
+        public bool NotConfirmAddFriendRequest(int relationID)
+        {
+            return manager.NotConfirmRelationRequest(relationID);
+        }
+
+        [WebMethod]
+        public List<Profiles> GetListFriends(int accountID, int pageNum, int pageSize)
+        {
+            var result = manager.GetListFriends(accountID, pageNum, pageSize);
+
+            return result;
+        }
+
+        [WebMethod]
+        public List<object> GetListFriendsJSON(int accountID, int pageNum, int pageSize)
+        {
+            return manager.GetListFriendsJSON(accountID, pageNum, pageSize);
+        }
+
+        [WebMethod]
+        public bool ChangePassword(string email, string oldPassword, string newPassword)
+        {
+            return manager.ChangePassword(email, oldPassword, newPassword);
+        }
+
+        [WebMethod]
+        public bool CheckEmailExisted(string email)
+        {
+            return manager.CheckEmailExisted(email);
+        }
+
+        [WebMethod]
+        public Accounts RetrieveByEmail(string email)
+        {
+            Accounts account = new Accounts();
+            account.Retrieve(email);
+            return account;
+        }
+
+        [WebMethod]
+        public bool UpdateProfile(int accID, string name, bool gender, string birthday, string phone, string avatar,
+                                  string address, string street,
+                                  string district, string city, string country, string favorite)
+        {
+            var profile = new Profiles()
+                              {
+                                  AccID = accID,
+                                  Name = name,
+                                  Gender = gender,
+                                  Birthday = DateTime.Parse(birthday),
+                                  Phone = phone,
+                                  Avatar = avatar,
+                                  Address = address,
+                                  Street = street,
+                                  District = district,
+                                  City = city,
+                                  Country = country,
+                                  Favorite = favorite
+                              };
+            return profile.Save(true);
+        }
+
     }
 }

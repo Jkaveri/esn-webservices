@@ -48,16 +48,23 @@
     <Compile Include="Accounts\Accounts.cs" />
     <Compile Include="Accounts\Profiles.cs" />
     <Compile Include="Accounts\AccountsManager.cs" />
-    <Compile Include="Accounts\AccountEnums.cs" />
+    <Compile Include="Apps\AppEnums.cs" />
     <Compile Include="Accounts\Relation.cs" />
-    <Compile Include="Accounts\RelationType.cs" />
-    <Compile Include="SiteSettings.cs" />
+    <Compile Include="Apps\LikeDetails.cs" />
+    <Compile Include="Apps\Notifications.cs" />
+    <Compile Include="Apps\NotificationsManager.cs" />
+    <Compile Include="Events\Events.cs" />
+    <Compile Include="Events\EventsManager.cs" />
+    <Compile Include="Events\EventTrustDetail.cs" />
+    <Compile Include="Events\EventType.cs" />
+    <Compile Include="Apps\SiteSettings.cs" />
     <Compile Include="Core\DB.cs" />
     <Compile Include="Core\DBQuery.cs" />
     <Compile Include="Core\JKBean.cs" />
     <Compile Include="Core\JKManager.cs" />
     <Compile Include="Core\Paginate.cs" />
     <Compile Include="Core\SiteSettings.cs" />
+    <Compile Include="Events\EventTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Cookier.cs" />
     <Compile Include="Utilities\CryptoRsa.cs" />
@@ -73,9 +80,7 @@
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Utilities\ZCache.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Apps\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
