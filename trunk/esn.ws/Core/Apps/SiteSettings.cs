@@ -120,6 +120,23 @@ namespace JK.Core
             get { return GetValue("ESN::Mail::ChangePasswordTemplate"); }
             set { SetValue("ESN::Mail::ChangePasswordTemplate", value); }
         }
+
         #endregion
+
+        #region events
+
+        public int EventMaxAge
+        {
+            get { return int.Parse(GetValue("ESN::Event::MaxAge")); }
+            set { SetValue("ESN::Event::MaxAge", value.ToString()); }
+        }
+        public int LikeDislikeEffect
+        {
+            get { return int.Parse(GetValue("ESN::Event::LikeDislikeEffect")); }
+            set { SetValue("ESN::Event::LikeDislikeEffect", value.ToString()); }
+        }
+
+        #endregion
+
     }
 }

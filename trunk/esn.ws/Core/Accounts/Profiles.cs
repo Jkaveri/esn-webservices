@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Apps;
 using JK.Core;
 
 namespace Core.Accounts
@@ -13,8 +14,6 @@ namespace Core.Accounts
 
         public int AccID { get; set; }
         public string Username { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Street { get; set; }
@@ -25,7 +24,8 @@ namespace Core.Accounts
         public string Phone { get; set; }
         public DateTime Birthday { get; set; }
         public bool Gender { get; set; }
-        public int SharedID { get; set; }
+        public ShareTypes ShareType { get; set; }
         public string Favorite { get; set; }
+        public int Status { get; set; }
     }
 }

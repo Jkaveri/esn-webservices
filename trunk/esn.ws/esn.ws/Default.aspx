@@ -12,7 +12,7 @@
         <ul>
             
             <li><a href="AccountsWS.asmx">Accounts</a></li>
-            <li><a href="EventsWS.asmx">Accounts</a></li>
+            <li><a href="EventsWS.asmx">Events</a></li>
             <li><a href="ApplicationsWS.asmx">Applications</a></li>
         </ul>
     </div>
